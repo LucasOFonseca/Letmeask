@@ -7,7 +7,7 @@
     flex: 7;
 
     background: #835afd;
-    color:#fff;
+    color: #fff;
 
     display: flex;
     flex-direction: column;
@@ -20,9 +20,9 @@
     }
 
     strong {
-      font: 700 2.25rem 'Poppins', sans-serif;
+      font: 700 2.25rem "Poppins", sans-serif;
       line-height: 42px;
-      
+
       margin-top: 1rem;
     }
 
@@ -61,28 +61,18 @@
 
     h2 {
       font-size: 1.5rem;
-      font-family: 'Poppins', sans-serif;
+      font-family: "Poppins", sans-serif;
 
       margin: 4rem 0 1.5rem;
     }
 
     form {
-      input {
-        height: 3.125rem;
-
-        border-radius: 0.5rem;
-        border: 1px solid #a8a8d3;
-
-        padding: 0 1rem;
-
-        background: #fff;
-      }
-
       button {
         margin-top: 1rem;
       }
 
-      button, input {
+      button,
+      input {
         width: 100%;
       }
     }
@@ -99,32 +89,6 @@
     }
   }
 
-  .create-room {
-    margin-top: 4rem;
-    height: 3.125rem;
-    border-radius: 0.5rem;
-    background: #ea4335;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 0;
-
-    font-weight: 500;
-    color: #fff;
-
-    cursor: pointer;
-
-    transition: filter 0.2s;
-
-    img {
-      margin-right: 0.5rem;
-    }
-
-    &:hover {
-      filter: brightness(0.9);
-    }
-  }
-
   .separator {
     font-size: 0.875rem;
     color: #a8a8d3;
@@ -135,7 +99,7 @@
     align-items: center;
 
     &::before {
-      content: '';
+      content: "";
 
       flex: 1;
       height: 1px;
@@ -146,7 +110,7 @@
     }
 
     &::after {
-      content: '';
+      content: "";
 
       flex: 1;
       height: 1px;

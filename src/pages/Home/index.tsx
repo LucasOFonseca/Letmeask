@@ -1,14 +1,14 @@
+import { Button, TextField } from "@material-ui/core";
 import { FormEvent, useState } from "react";
 import { useHistory } from "react-router-dom";
 import googleIconImg from "../../assets/images/google-icon.svg";
 import illustrationImg from "../../assets/images/illustration.svg";
 import logoImg from "../../assets/images/logo.svg";
-import { CustomButton } from "../../components/CustomButton";
 import { useAuth } from "../../hooks/useAuth";
 import { database } from "../../services/firebase";
 import "../../styles/auth.scss";
 
-// sala de testes -MdJX9NzuwWeTWbW5q8-
+// sala de testes -MdyQzQaRYiu4erW0hdB
 
 export function Home() {
   const history = useHistory();
@@ -62,21 +62,53 @@ export function Home() {
       <main>
         <div className="main-content">
           <img src={logoImg} alt="Letmeask" />
-          <button className="create-room" onClick={handleCreateRoom}>
-            <img src={googleIconImg} alt="Logo do Google" />
+          <Button
+            variant="contained"
+            style={{
+              marginTop: "4rem",
+              height: "3.125rem",
+              borderRadius: "0.5rem",
+              background: "#ea4335",
+              fontWeight: 500,
+              color: "#fff",
+              textTransform: "none",
+            }}
+            onClick={handleCreateRoom}
+          >
+            <img
+              src={googleIconImg}
+              alt="Logo do Google"
+              style={{ marginRight: "0.5rem" }}
+            />
             Crie sua sala com o Google
-          </button>
+          </Button>
 
           <div className="separator">ou entre em uma sala</div>
 
           <form onSubmit={handleJoinRoom}>
-            <input
-              type="text"
-              placeholder="Digite o código da sala"
+            <TextField
+              fullWidth
+              variant="outlined"
+              label="Digite o código da sala"
               onChange={(event) => setRoomCode(event.target.value)}
               value={roomCode}
+              style={{
+                background: "#fff",
+                borderRadius: "0.5rem",
+              }}
             />
-            <CustomButton type="submit">Entrar na sala</CustomButton>
+            <Button
+              variant="contained"
+              type="submit"
+              style={{
+                color: "#fff",
+                background: "#835afd",
+                borderRadius: "0.5rem",
+                padding: "0.75rem 2rem",
+              }}
+            >
+              Entrar na sala
+            </Button>
           </form>
         </div>
       </main>

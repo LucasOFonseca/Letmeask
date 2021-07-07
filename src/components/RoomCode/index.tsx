@@ -13,7 +13,7 @@ export function RoomCode(props: RoomCodeProps) {
   return (
     <button className="room-code" onClick={copyRoomCodeToClipboard}>
       <div>
-        <FileCopyOutlined />
+        <FileCopyOutlined style={{ color: "#fff" }} />
       </div>
       <span>Sala #{props.code}</span>
     </button>

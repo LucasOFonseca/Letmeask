@@ -1,8 +1,8 @@
+import { Button, TextField } from "@material-ui/core";
 import { FormEvent, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import illustrationImg from "../../assets/images/illustration.svg";
 import logoImg from "../../assets/images/logo.svg";
-import { CustomButton } from "../../components/CustomButton";
 import { useAuth } from "../../hooks/useAuth";
 import { database } from "../../services/firebase";
 import "../../styles/auth.scss";
@@ -48,12 +48,28 @@ export function NewRoom() {
           <h2>Criar uma nova sala</h2>
 
           <form onSubmit={handleCreateRoom}>
-            <input
-              type="text"
-              placeholder="Nome da sala"
+            <TextField
+              fullWidth
+              variant="outlined"
+              label="Nome da sala"
               onChange={(event) => setNewRoom(event.target.value)}
+              style={{
+                background: "#fff",
+                borderRadius: "0.5rem",
+              }}
             />
-            <CustomButton type="submit">Criar sala</CustomButton>
+            <Button
+              variant="contained"
+              type="submit"
+              style={{
+                color: "#fff",
+                background: "#835afd",
+                borderRadius: "0.5rem",
+                padding: "0.75rem 2rem",
+              }}
+            >
+              Criar sala
+            </Button>
           </form>
           <p>
             Quer entrar em uma sala existente? <Link to="/">Clique aqui</Link>

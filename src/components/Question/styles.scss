@@ -55,6 +55,16 @@
       gap: 1rem;
     }
 
+    .like-btn-div {
+      display: flex;
+      align-items: center;
+
+      > span {
+        color: #835afd;
+        margin-right: 0.5rem;
+      }
+    }
+
     button {
       border: 0;
 

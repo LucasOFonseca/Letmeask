@@ -1,4 +1,4 @@
-import { IconButton, Tooltip } from "@material-ui/core";
+import { Box, Button, IconButton, Tooltip } from "@material-ui/core";
 import {
   CheckCircleOutlineRounded,
   DeleteOutline,
@@ -6,7 +6,6 @@ import {
 } from "@material-ui/icons";
 import { useHistory, useParams } from "react-router-dom";
 import logoImg from "../../assets/images/logo.svg";
-import { CustomButton } from "../../components/CustomButton";
 import { Question } from "../../components/Question";
 import { RoomCode } from "../../components/RoomCode";
 import { useRoom } from "../../hooks/useRoom";
@@ -57,9 +56,19 @@ export function AdminRoom() {
 
           <div>
             <RoomCode code={roomId} />
-            <CustomButton isOutlined onClick={handleEndRoom}>
+            <Button
+              variant="outlined"
+              onClick={handleEndRoom}
+              style={{
+                textTransform: "none",
+                color: "#835afd",
+                background: "#fff",
+                borderColor: "#835afd",
+                borderRadius: "0.5rem",
+              }}
+            >
               Encerrar sala
-            </CustomButton>
+            </Button>
           </div>
         </div>
       </header>
@@ -76,49 +85,64 @@ export function AdminRoom() {
           )}
         </div>
 
-        <div className="question-list">
-          {questions.map((question) => {
-            return (
-              <Question
-                key={question.id}
-                content={question.content}
-                author={question.author}
-                isAnswered={question.isAnswered}
-                isHighlighted={question.isHighlighted}
-              >
-                {!question.isAnswered && (
-                  <>
-                    <Tooltip title="Marcar como respondida">
-                      <IconButton
-                        type="button"
-                        onClick={() =>
-                          handleCheckQuestionAsAnswered(question.id)
-                        }
-                      >
-                        <CheckCircleOutlineRounded />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title='marcar como "respondendo"'>
-                      <IconButton
-                        onClick={() => handleHighlightQuestion(question.id)}
-                      >
-                        <QuestionAnswerOutlined />
-                      </IconButton>
-                    </Tooltip>
-                  </>
-                )}
-                <Tooltip title="Excluir pergunta">
-                  <IconButton
-                    type="button"
-                    onClick={() => handleDeleteQuestion(question.id)}
-                  >
-                    <DeleteOutline />
-                  </IconButton>
-                </Tooltip>
-              </Question>
-            );
-          })}
-        </div>
+        {questions.length > 0 ? (
+          <div className="question-list">
+            {questions.map((question) => {
+              return (
+                <Question
+                  key={question.id}
+                  content={question.content}
+                  author={question.author}
+                  isAnswered={question.isAnswered}
+                  isHighlighted={question.isHighlighted}
+                >
+                  {!question.isAnswered && (
+                    <>
+                      <Tooltip title="Marcar como respondida">
+                        <IconButton
+                          type="button"
+                          onClick={() =>
+                            handleCheckQuestionAsAnswered(question.id)
+                          }
+                        >
+                          <CheckCircleOutlineRounded />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title='marcar como "respondendo"'>
+                        <IconButton
+                          onClick={() => handleHighlightQuestion(question.id)}
+                        >
+                          <QuestionAnswerOutlined />
+                        </IconButton>
+                      </Tooltip>
+                    </>
+                  )}
+                  <Tooltip title="Excluir pergunta">
+                    <IconButton
+                      type="button"
+                      onClick={() => handleDeleteQuestion(question.id)}
+                    >
+                      <DeleteOutline />
+                    </IconButton>
+                  </Tooltip>
+                </Question>
+              );
+            })}
+          </div>
+        ) : (
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            style={{ opacity: "0.5", gap: "1rem", marginTop: "4rem" }}
+          >
+            <h2>As perguntas enviadas aparecerão aqui!</h2>
+            <p style={{ fontWeight: 500 }}>
+              Compartilhe o código da sala para começar a receber perguntas dos
+              seus espectadores.
+            </p>
+          </Box>
+        )}
       </main>
     </div>
   );

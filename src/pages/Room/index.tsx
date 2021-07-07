@@ -1,9 +1,8 @@
-import { IconButton, Tooltip } from "@material-ui/core";
+import { Box, Button, IconButton, TextField, Tooltip } from "@material-ui/core";
 import { ThumbUpAltRounded } from "@material-ui/icons";
 import { FormEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import logoImg from "../../assets/images/logo.svg";
-import { CustomButton } from "../../components/CustomButton";
 import { Question } from "../../components/Question";
 import { RoomCode } from "../../components/RoomCode";
 import { useAuth } from "../../hooks/useAuth";
@@ -88,10 +87,15 @@ export function Room() {
         </div>
 
         <form onSubmit={handleSendQuestion}>
-          <textarea
-            placeholder="O que você quer perguntar?"
+          <TextField
+            multiline
+            fullWidth
+            variant="outlined"
+            rows={5}
+            label="O que você quer perguntar?"
             onChange={(event) => setNewQuestion(event.target.value)}
             value={newQuestion}
+            style={{ background: "#fff" }}
           />
 
           <div className="form-footer">
@@ -105,46 +109,73 @@ export function Room() {
                 Para enviar uma pergunta, <button>faça seu login</button>.
               </span>
             )}
-            <CustomButton type="submit" disabled={!user}>
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={!user || newQuestion === ""}
+              style={{
+                color: "#fff",
+                background: "#835afd",
+                borderRadius: "0.5rem",
+                padding: "0.75rem 2rem",
+                opacity: !user || newQuestion === "" ? "0.75" : undefined,
+              }}
+            >
               Enviar pergunta
-            </CustomButton>
+            </Button>
           </div>
         </form>
 
-        <div className="question-list">
-          {questions.map((question) => {
-            return (
-              <Question
-                key={question.id}
-                content={question.content}
-                author={question.author}
-                isAnswered={question.isAnswered}
-                isHighlighted={question.isHighlighted}
-              >
-                {!question.isAnswered && (
-                  <Tooltip title={!question.likeId ? "Like" : "Remover like"}>
-                    <IconButton
-                      className={`like-button ${
-                        question.likeId ? "liked" : ""
-                      }`}
-                      type="button"
-                      aria-label="Marcar como gostei"
-                      onClick={() =>
-                        handleLikeQuestion(question.id, question.likeId)
-                      }
-                    >
+        {questions.length > 0 ? (
+          <div className="question-list">
+            {questions.map((question) => {
+              return (
+                <Question
+                  key={question.id}
+                  content={question.content}
+                  author={question.author}
+                  isAnswered={question.isAnswered}
+                  isHighlighted={question.isHighlighted}
+                >
+                  {!question.isAnswered && (
+                    <div className="like-btn-div">
                       {question.likeCount > 0 && (
                         <span>{question.likeCount}</span>
                       )}
 
-                      <ThumbUpAltRounded />
-                    </IconButton>
-                  </Tooltip>
-                )}
-              </Question>
-            );
-          })}
-        </div>
+                      <Tooltip
+                        title={!question.likeId ? "Like" : "Remover like"}
+                      >
+                        <IconButton
+                          className={`like-button ${
+                            question.likeId ? "liked" : ""
+                          }`}
+                          type="button"
+                          aria-label="Marcar como gostei"
+                          onClick={() =>
+                            handleLikeQuestion(question.id, question.likeId)
+                          }
+                        >
+                          <ThumbUpAltRounded />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+                  )}
+                </Question>
+              );
+            })}
+          </div>
+        ) : (
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            style={{ opacity: "0.5", gap: "1rem", marginTop: "4rem" }}
+          >
+            <h2>Esta sala ainda não tem perguntas!</h2>
+            <h3>Seja o primeiro a enviar uma :)</h3>
+          </Box>
+        )}
       </main>
     </div>
   );
