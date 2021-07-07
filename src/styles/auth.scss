@@ -1,0 +1,159 @@
+#page-auth {
+  display: flex;
+  align-items: stretch;
+  height: 100vh;
+
+  aside {
+    flex: 7;
+
+    background: #835afd;
+    color:#fff;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 120px 88px;
+
+    img {
+      max-width: 320px;
+    }
+
+    strong {
+      font: 700 2.25rem 'Poppins', sans-serif;
+      line-height: 42px;
+      
+      margin-top: 1rem;
+    }
+
+    p {
+      font-size: 1.5rem;
+      line-height: 32px;
+      color: #f8f8f8;
+
+      margin-top: 1rem;
+    }
+  }
+
+  main {
+    flex: 8;
+
+    padding: 0 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    width: 100%;
+    max-width: 320px;
+
+    text-align: center;
+
+    > img {
+      align-self: center;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-family: 'Poppins', sans-serif;
+
+      margin: 4rem 0 1.5rem;
+    }
+
+    form {
+      input {
+        height: 3.125rem;
+
+        border-radius: 0.5rem;
+        border: 1px solid #a8a8d3;
+
+        padding: 0 1rem;
+
+        background: #fff;
+      }
+
+      button {
+        margin-top: 1rem;
+      }
+
+      button, input {
+        width: 100%;
+      }
+    }
+
+    p {
+      font-size: 0.875rem;
+      color: #737388;
+
+      margin-top: 1rem;
+
+      a {
+        color: #e559f9;
+      }
+    }
+  }
+
+  .create-room {
+    margin-top: 4rem;
+    height: 3.125rem;
+    border-radius: 0.5rem;
+    background: #ea4335;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    font-weight: 500;
+    color: #fff;
+
+    cursor: pointer;
+
+    transition: filter 0.2s;
+
+    img {
+      margin-right: 0.5rem;
+    }
+
+    &:hover {
+      filter: brightness(0.9);
+    }
+  }
+
+  .separator {
+    font-size: 0.875rem;
+    color: #a8a8d3;
+
+    margin: 2rem 0;
+
+    display: flex;
+    align-items: center;
+
+    &::before {
+      content: '';
+
+      flex: 1;
+      height: 1px;
+
+      background: #a8a8d3;
+
+      margin-right: 1rem;
+    }
+
+    &::after {
+      content: '';
+
+      flex: 1;
+      height: 1px;
+
+      background: #a8a8d3;
+
+      margin-left: 1rem;
+    }
+  }
+}
