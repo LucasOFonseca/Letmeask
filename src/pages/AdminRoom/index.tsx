@@ -4,8 +4,10 @@ import {
   DeleteOutline,
   QuestionAnswerOutlined,
 } from "@material-ui/icons";
+import { useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import logoImg from "../../assets/images/logo.svg";
+import { ConfirmationDialog } from "../../components/ConfirmationDialog/ConfirmationDialog";
 import { Question } from "../../components/Question";
 import { RoomCode } from "../../components/RoomCode";
 import { useRoom } from "../../hooks/useRoom";
@@ -21,6 +23,8 @@ export function AdminRoom() {
   const roomId = params.id;
 
   const { title, questions } = useRoom(roomId);
+
+  const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
 
   async function handleEndRoom() {
     await database.ref(`rooms/${roomId}`).update({
@@ -49,101 +53,111 @@ export function AdminRoom() {
   }
 
   return (
-    <div id="page-room">
-      <header>
-        <div className="content">
-          <img src={logoImg} alt="Letmeask" />
+    <>
+      <ConfirmationDialog
+        open={showConfirmationDialog}
+        onYesClick={handleEndRoom}
+        onNoClick={setShowConfirmationDialog}
+        title="Deseja encerrar a sala?"
+        bodyText="Após conformar essa ação esta sala deixará de existir"
+      />
 
-          <div>
-            <RoomCode code={roomId} />
-            <Button
-              variant="outlined"
-              onClick={handleEndRoom}
-              style={{
-                textTransform: "none",
-                color: "#835afd",
-                background: "#fff",
-                borderColor: "#835afd",
-                borderRadius: "0.5rem",
-              }}
+      <div id="page-room">
+        <header>
+          <div className="content">
+            <img src={logoImg} alt="Letmeask" />
+
+            <div>
+              <RoomCode code={roomId} />
+              <Button
+                variant="outlined"
+                onClick={() => setShowConfirmationDialog(true)}
+                style={{
+                  textTransform: "none",
+                  color: "#835afd",
+                  background: "#fff",
+                  borderColor: "#835afd",
+                  borderRadius: "0.5rem",
+                }}
+              >
+                Encerrar sala
+              </Button>
+            </div>
+          </div>
+        </header>
+
+        <main>
+          <div className="room-title">
+            <h1>Sala {title}</h1>
+
+            {questions.length > 0 && (
+              <span>
+                {questions.length}{" "}
+                {questions.length === 1 ? "pergunta" : "perguntas"}
+              </span>
+            )}
+          </div>
+
+          {questions.length > 0 ? (
+            <div className="question-list">
+              {questions.map((question) => {
+                return (
+                  <Question
+                    key={question.id}
+                    content={question.content}
+                    author={question.author}
+                    isAnswered={question.isAnswered}
+                    isHighlighted={question.isHighlighted}
+                  >
+                    {!question.isAnswered && (
+                      <>
+                        <Tooltip title="Marcar como respondida">
+                          <IconButton
+                            type="button"
+                            onClick={() =>
+                              handleCheckQuestionAsAnswered(question.id)
+                            }
+                          >
+                            <CheckCircleOutlineRounded />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title='marcar como "respondendo"'>
+                          <IconButton
+                            onClick={() => handleHighlightQuestion(question.id)}
+                          >
+                            <QuestionAnswerOutlined />
+                          </IconButton>
+                        </Tooltip>
+                      </>
+                    )}
+                    <Tooltip title="Excluir pergunta">
+                      <IconButton
+                        type="button"
+                        onClick={() => handleDeleteQuestion(question.id)}
+                      >
+                        <DeleteOutline />
+                      </IconButton>
+                    </Tooltip>
+                  </Question>
+                );
+              })}
+            </div>
+          ) : (
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              style={{ opacity: "0.5", gap: "1rem", marginTop: "4rem" }}
             >
-              Encerrar sala
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <main>
-        <div className="room-title">
-          <h1>Sala {title}</h1>
-
-          {questions.length > 0 && (
-            <span>
-              {questions.length}{" "}
-              {questions.length === 1 ? "pergunta" : "perguntas"}
-            </span>
+              <h2>As perguntas enviadas aparecerão aqui!</h2>
+              <p style={{ fontWeight: 500 }}>
+                Compartilhe o código da sala para começar a receber perguntas
+                dos seus espectadores.
+              </p>
+            </Box>
           )}
-        </div>
-
-        {questions.length > 0 ? (
-          <div className="question-list">
-            {questions.map((question) => {
-              return (
-                <Question
-                  key={question.id}
-                  content={question.content}
-                  author={question.author}
-                  isAnswered={question.isAnswered}
-                  isHighlighted={question.isHighlighted}
-                >
-                  {!question.isAnswered && (
-                    <>
-                      <Tooltip title="Marcar como respondida">
-                        <IconButton
-                          type="button"
-                          onClick={() =>
-                            handleCheckQuestionAsAnswered(question.id)
-                          }
-                        >
-                          <CheckCircleOutlineRounded />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title='marcar como "respondendo"'>
-                        <IconButton
-                          onClick={() => handleHighlightQuestion(question.id)}
-                        >
-                          <QuestionAnswerOutlined />
-                        </IconButton>
-                      </Tooltip>
-                    </>
-                  )}
-                  <Tooltip title="Excluir pergunta">
-                    <IconButton
-                      type="button"
-                      onClick={() => handleDeleteQuestion(question.id)}
-                    >
-                      <DeleteOutline />
-                    </IconButton>
-                  </Tooltip>
-                </Question>
-              );
-            })}
-          </div>
-        ) : (
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            style={{ opacity: "0.5", gap: "1rem", marginTop: "4rem" }}
-          >
-            <h2>As perguntas enviadas aparecerão aqui!</h2>
-            <p style={{ fontWeight: 500 }}>
-              Compartilhe o código da sala para começar a receber perguntas dos
-              seus espectadores.
-            </p>
-          </Box>
-        )}
-      </main>
-    </div>
+        </main>
+      </div>
+    </>
   );
 }
