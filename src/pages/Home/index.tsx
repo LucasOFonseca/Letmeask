@@ -1,5 +1,5 @@
 import { Button, TextField } from "@material-ui/core";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import googleIconImg from "../../assets/images/google-icon.svg";
 import illustrationImg from "../../assets/images/illustration.svg";
@@ -8,7 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { database } from "../../services/firebase";
 import "../../styles/auth.scss";
 
-// sala de testes -MdyQzQaRYiu4erW0hdB
+// sala de testes -MeB3i2NsO5STBnYsG3B
 
 export function Home() {
   const history = useHistory();
@@ -16,6 +16,10 @@ export function Home() {
   const { user, signInWithGoogle } = useAuth();
 
   const [roomCode, setRoomCode] = useState("");
+  const [validate, setValidate] = useState({
+    error: false,
+    helperText: "",
+  });
 
   async function handleCreateRoom() {
     if (!user) {
@@ -29,6 +33,11 @@ export function Home() {
     event.preventDefault();
 
     if (roomCode.trim() === "") {
+      setValidate({
+        error: true,
+        helperText: "Insira um código",
+      });
+
       return;
     }
 
@@ -47,6 +56,12 @@ export function Home() {
 
     history.push(`/rooms/${roomCode}`);
   }
+
+  useEffect(() => {
+    if (validate.error === true && roomCode !== "") {
+      setValidate({ error: false, helperText: "" });
+    }
+  }, [roomCode, validate.error]);
 
   return (
     <div id="page-auth">
@@ -84,7 +99,6 @@ export function Home() {
           </Button>
 
           <div className="separator">ou entre em uma sala</div>
-
           <form onSubmit={handleJoinRoom}>
             <TextField
               fullWidth
@@ -93,9 +107,10 @@ export function Home() {
               onChange={(event) => setRoomCode(event.target.value)}
               value={roomCode}
               style={{
-                background: "#fff",
                 borderRadius: "0.5rem",
               }}
+              error={validate.error}
+              helperText={validate.helperText}
             />
             <Button
               variant="contained"

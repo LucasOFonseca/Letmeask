@@ -1,6 +1,6 @@
 import { Box, Button, IconButton, TextField, Tooltip } from "@material-ui/core";
 import { ThumbUpAltRounded } from "@material-ui/icons";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import logoImg from "../../assets/images/logo.svg";
 import { Question } from "../../components/Question";
@@ -17,15 +17,38 @@ type RoomParams = {
 export function Room() {
   const { user } = useAuth();
   const params = useParams<RoomParams>();
-  const [newQuestion, setNewQuestion] = useState("");
   const roomId = params.id;
 
   const { title, questions } = useRoom(roomId);
+
+  const [newQuestion, setNewQuestion] = useState("");
+  const [validate, setValidate] = useState({
+    error: false,
+    helperText: "",
+  });
 
   async function handleSendQuestion(event: FormEvent) {
     event.preventDefault();
 
     if (newQuestion.trim() === "") {
+      setValidate({
+        error: true,
+        helperText: "Digite algo",
+      });
+
+      return;
+    }
+
+    if (newQuestion.length < 3) {
+      setValidate({
+        error: true,
+        helperText: "Mínimo de 3 caracteres",
+      });
+
+      return;
+    }
+
+    if (newQuestion.length > 500) {
       return;
     }
 
@@ -64,6 +87,26 @@ export function Room() {
     }
   }
 
+  useEffect(() => {
+    if (newQuestion.length > 500) {
+      setValidate({
+        error: true,
+        helperText: "Máximo de 500",
+      });
+    }
+
+    if (
+      validate.error === true &&
+      newQuestion !== "" &&
+      validate.error === true &&
+      newQuestion.length > 3 &&
+      validate.error === true &&
+      newQuestion.length < 500
+    ) {
+      setValidate({ error: false, helperText: "" });
+    }
+  }, [newQuestion, validate.error]);
+
   return (
     <div id="page-room">
       <header>
@@ -95,7 +138,8 @@ export function Room() {
             label="O que você quer perguntar?"
             onChange={(event) => setNewQuestion(event.target.value)}
             value={newQuestion}
-            style={{ background: "#fff" }}
+            error={validate.error}
+            helperText={validate.helperText}
           />
 
           <div className="form-footer">

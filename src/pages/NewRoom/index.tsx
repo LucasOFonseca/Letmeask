@@ -1,5 +1,5 @@
 import { Button, TextField } from "@material-ui/core";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import illustrationImg from "../../assets/images/illustration.svg";
 import logoImg from "../../assets/images/logo.svg";
@@ -12,11 +12,20 @@ export function NewRoom() {
   const history = useHistory();
 
   const [newRoom, setNewRoom] = useState("");
+  const [validate, setValidate] = useState({
+    error: false,
+    helperText: "",
+  });
 
   async function handleCreateRoom(event: FormEvent) {
     event.preventDefault();
 
     if (newRoom.trim() === "") {
+      setValidate({
+        error: true,
+        helperText: "Insira um nome para sua sala",
+      });
+
       return;
     }
 
@@ -29,6 +38,12 @@ export function NewRoom() {
 
     history.push(`/admin/rooms/${firebaseRoom.key}`);
   }
+
+  useEffect(() => {
+    if (validate.error === true && newRoom !== "") {
+      setValidate({ error: false, helperText: "" });
+    }
+  }, [newRoom, validate.error]);
 
   return (
     <div id="page-auth">
@@ -54,9 +69,10 @@ export function NewRoom() {
               label="Nome da sala"
               onChange={(event) => setNewRoom(event.target.value)}
               style={{
-                background: "#fff",
                 borderRadius: "0.5rem",
               }}
+              error={validate.error}
+              helperText={validate.helperText}
             />
             <Button
               variant="contained"
@@ -71,7 +87,7 @@ export function NewRoom() {
               Criar sala
             </Button>
           </form>
-          <p>
+          <p className="link-to-home">
             Quer entrar em uma sala existente? <Link to="/">Clique aqui</Link>
           </p>
         </div>
