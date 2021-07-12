@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { AuthContextProvider } from "./contexts/AuthContexts";
 import { AdminRoom } from "./pages/AdminRoom";
 import { Home } from "./pages/Home";
@@ -9,6 +10,15 @@ function App() {
   return (
     <BrowserRouter>
       <AuthContextProvider>
+        <ToastContainer
+          limit={3}
+          position="bottom-center"
+          autoClose={5000}
+          closeOnClick
+          pauseOnFocusLoss
+          pauseOnHover
+        />
+
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/rooms/new" component={NewRoom} />

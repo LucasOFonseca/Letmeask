@@ -1,6 +1,8 @@
 import { Button, TextField } from "@material-ui/core";
 import { FormEvent, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import googleIconImg from "../../assets/images/google-icon.svg";
 import illustrationImg from "../../assets/images/illustration.svg";
 import logoImg from "../../assets/images/logo.svg";
@@ -44,13 +46,13 @@ export function Home() {
     const roomRef = await database.ref(`rooms/${roomCode}`).get();
 
     if (!roomRef.exists()) {
-      alert("Room does not exists!");
+      toast.error("Sala não encontrada!");
 
       return;
     }
 
     if (roomRef.val().endedAt) {
-      alert("Room already closed.");
+      toast.error("Sala fechada.");
       return;
     }
 
