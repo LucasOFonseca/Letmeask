@@ -1,4 +1,4 @@
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField, useMediaQuery } from "@material-ui/core";
 import { FormEvent, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -10,10 +10,12 @@ import { useAuth } from "../../hooks/useAuth";
 import { database } from "../../services/firebase";
 import "../../styles/auth.scss";
 
-// sala de testes -MeB3i2NsO5STBnYsG3B
+// sala de testes -MeXKLuUYh17NCBKAhi3
 
 export function Home() {
   const history = useHistory();
+
+  const desktop = useMediaQuery("(min-width: 950px)");
 
   const { user, signInWithGoogle } = useAuth();
 
@@ -65,20 +67,99 @@ export function Home() {
     }
   }, [roomCode, validate.error]);
 
+  if (desktop) {
+    return (
+      <div id="page-auth">
+        <aside>
+          <div>
+            <img
+              src={illustrationImg}
+              alt="Ilustração simbolizando perguntas e respostas"
+            />
+            <strong>
+              Crie salas de Q&amp;A
+              <wbr /> ao-vivo
+            </strong>
+            <p>
+              Tire as dúvidas da sua audiência em
+              <wbr /> tempo-real
+            </p>
+          </div>
+        </aside>
+
+        <main>
+          <div className="main-content">
+            <img src={logoImg} alt="Letmeask" />
+            <Button
+              variant="contained"
+              style={{
+                marginTop: "4rem",
+                height: "3.125rem",
+                borderRadius: "0.5rem",
+                background: "#ea4335",
+                fontWeight: 500,
+                color: "#fff",
+                textTransform: "none",
+              }}
+              onClick={handleCreateRoom}
+            >
+              <img
+                src={googleIconImg}
+                alt="Logo do Google"
+                style={{ marginRight: "0.5rem" }}
+              />
+              Crie sua sala com o Google
+            </Button>
+
+            <div className="separator">ou entre em uma sala</div>
+            <form onSubmit={handleJoinRoom}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Digite o código da sala"
+                onChange={(event) => setRoomCode(event.target.value)}
+                value={roomCode}
+                style={{
+                  borderRadius: "0.5rem",
+                }}
+                error={validate.error}
+                helperText={validate.helperText}
+              />
+              <Button
+                variant="contained"
+                type="submit"
+                style={{
+                  color: "#fff",
+                  background: "#835afd",
+                  borderRadius: "0.5rem",
+                  padding: "0.75rem 2rem",
+                }}
+              >
+                Entrar na sala
+              </Button>
+            </form>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div id="page-auth">
-      <aside>
-        <img
-          src={illustrationImg}
-          alt="Ilustração simbolizando perguntas e respostas"
-        />
-        <strong>Crie salas de Q&amp;A ao-vivo</strong>
-        <p>Tire as dúvidas da sua audiência em tempo-real</p>
-      </aside>
-
       <main>
-        <div className="main-content">
+        <div className="text-container">
           <img src={logoImg} alt="Letmeask" />
+          <strong>
+            Crie salas de Q&amp;A
+            <wbr /> ao-vivo
+          </strong>
+          <p>
+            Tire as dúvidas da sua audiência em
+            <wbr /> tempo-real
+          </p>
+        </div>
+
+        <div className="main-content">
           <Button
             variant="contained"
             style={{

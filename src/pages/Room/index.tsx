@@ -118,108 +118,115 @@ export function Room() {
       </header>
 
       <main>
-        <div className="room-title">
-          <h1>Sala {title}</h1>
+        <div className="main-container">
+          <div className="room-title">
+            <h1>Sala {title}</h1>
 
-          {questions.length > 0 && (
-            <span>
-              {questions.length}{" "}
-              {questions.length === 1 ? "pergunta" : "perguntas"}
-            </span>
-          )}
-        </div>
-
-        <form onSubmit={handleSendQuestion}>
-          <TextField
-            multiline
-            fullWidth
-            variant="outlined"
-            rows={5}
-            label="O que você quer perguntar?"
-            onChange={(event) => setNewQuestion(event.target.value)}
-            value={newQuestion}
-            error={validate.error}
-            helperText={validate.helperText}
-          />
-
-          <div className="form-footer">
-            {user ? (
-              <div className="user-info">
-                <img src={user.avatar} alt={user.name} />
-                <span>{user.name}</span>
-              </div>
-            ) : (
+            {questions.length > 0 && (
               <span>
-                Para enviar uma pergunta, <button>faça seu login</button>.
+                {questions.length}{" "}
+                {questions.length === 1 ? "pergunta" : "perguntas"}
               </span>
             )}
-            <Button
-              variant="contained"
-              type="submit"
-              disabled={!user || newQuestion === ""}
+          </div>
+
+          <form onSubmit={handleSendQuestion}>
+            <TextField
+              multiline
+              fullWidth
+              variant="outlined"
+              rows={5}
+              label="O que você quer perguntar?"
+              onChange={(event) => setNewQuestion(event.target.value)}
+              value={newQuestion}
+              error={validate.error}
+              helperText={validate.helperText}
+            />
+
+            <div className="form-footer">
+              {user ? (
+                <div className="user-info">
+                  <img src={user.avatar} alt={user.name} />
+                  <span>{user.name}</span>
+                </div>
+              ) : (
+                <span>
+                  Para enviar uma pergunta, <button>faça seu login</button>.
+                </span>
+              )}
+              <Button
+                variant="contained"
+                type="submit"
+                disabled={!user || newQuestion === ""}
+                style={{
+                  color: "#fff",
+                  background: "#835afd",
+                  borderRadius: "0.5rem",
+                  padding: "0.75rem 2rem",
+                  opacity: !user || newQuestion === "" ? "0.75" : undefined,
+                }}
+              >
+                Enviar pergunta
+              </Button>
+            </div>
+          </form>
+
+          {questions.length > 0 ? (
+            <div className="question-list">
+              {questions.map((question) => {
+                return (
+                  <Question
+                    key={question.id}
+                    content={question.content}
+                    author={question.author}
+                    isAnswered={question.isAnswered}
+                    isHighlighted={question.isHighlighted}
+                  >
+                    {!question.isAnswered && (
+                      <div className="like-btn-div">
+                        {question.likeCount > 0 && (
+                          <span>{question.likeCount}</span>
+                        )}
+
+                        <Tooltip
+                          title={!question.likeId ? "Like" : "Remover like"}
+                        >
+                          <IconButton
+                            className={`like-button ${
+                              question.likeId ? "liked" : ""
+                            }`}
+                            type="button"
+                            aria-label="Marcar como gostei"
+                            onClick={() =>
+                              handleLikeQuestion(question.id, question.likeId)
+                            }
+                          >
+                            <ThumbUpAltRounded />
+                          </IconButton>
+                        </Tooltip>
+                      </div>
+                    )}
+                  </Question>
+                );
+              })}
+            </div>
+          ) : (
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
               style={{
-                color: "#fff",
-                background: "#835afd",
-                borderRadius: "0.5rem",
-                padding: "0.75rem 2rem",
-                opacity: !user || newQuestion === "" ? "0.75" : undefined,
+                opacity: "0.5",
+                gap: "1rem",
+                marginTop: "4rem",
+                textAlign: "center",
               }}
             >
-              Enviar pergunta
-            </Button>
-          </div>
-        </form>
-
-        {questions.length > 0 ? (
-          <div className="question-list">
-            {questions.map((question) => {
-              return (
-                <Question
-                  key={question.id}
-                  content={question.content}
-                  author={question.author}
-                  isAnswered={question.isAnswered}
-                  isHighlighted={question.isHighlighted}
-                >
-                  {!question.isAnswered && (
-                    <div className="like-btn-div">
-                      {question.likeCount > 0 && (
-                        <span>{question.likeCount}</span>
-                      )}
-
-                      <Tooltip
-                        title={!question.likeId ? "Like" : "Remover like"}
-                      >
-                        <IconButton
-                          className={`like-button ${
-                            question.likeId ? "liked" : ""
-                          }`}
-                          type="button"
-                          aria-label="Marcar como gostei"
-                          onClick={() =>
-                            handleLikeQuestion(question.id, question.likeId)
-                          }
-                        >
-                          <ThumbUpAltRounded />
-                        </IconButton>
-                      </Tooltip>
-                    </div>
-                  )}
-                </Question>
-              );
-            })}
-          </div>
-        ) : (
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            style={{ opacity: "0.5", gap: "1rem", marginTop: "4rem" }}
-          >
-            <h2>Esta sala ainda não tem perguntas!</h2>
-            <h3>Seja o primeiro a enviar uma :)</h3>
-          </Box>
-        )}
+              <h2>Esta sala ainda não tem perguntas!</h2>
+              <h3>Seja o primeiro a enviar uma :)</h3>
+            </Box>
+          )}
+        </div>
       </main>
     </div>
   );

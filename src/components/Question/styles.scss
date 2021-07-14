@@ -22,14 +22,13 @@
   }
 
   p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: justify;
     color: #29292e;
   }
 
   footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
     margin-top: 24px;
 
     .user-info {
@@ -53,6 +52,10 @@
     > div {
       display: flex;
       gap: 1rem;
+    }
+
+    .children-container {
+      justify-content: flex-end;
     }
 
     .like-btn-div {
