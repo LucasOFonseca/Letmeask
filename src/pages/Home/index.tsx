@@ -10,8 +10,6 @@ import { useAuth } from "../../hooks/useAuth";
 import { database } from "../../services/firebase";
 import "../../styles/auth.scss";
 
-// sala de testes -MeXKLuUYh17NCBKAhi3
-
 export function Home() {
   const history = useHistory();
 
